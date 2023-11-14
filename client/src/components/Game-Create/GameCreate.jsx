@@ -3,8 +3,9 @@ export default function GameCreate() {
     <section id="create-page" className="auth">
       <form id="create">
         <div className="container">
+            
           <h1>Create Game</h1>
-          
+
           <label htmlFor="leg-title">Legendary title:</label>
           <input type="text" id="title" name="title" placeholder="Enter game title..." />
 
@@ -21,7 +22,8 @@ export default function GameCreate() {
           <textarea name="summary" id="summary" defaultValue={""} />
 
           <input className="btn submit" type="submit" defaultValue="Create Game" />
-           </div>
+        
+        </div>
       </form>
     </section>
   );
