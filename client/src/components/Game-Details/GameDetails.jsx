@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable no-unused-vars */
 
 import { useEffect, useState } from "react";
@@ -7,11 +8,19 @@ import * as commentService from '../../services/commentService';
 
 export default function GameDetails() {
     const { gameId } = useParams();
-    const [game,setGame] = useState({})
+    const [game,setGame] = useState({});
+    const [comments,setComments] = useState([]);
+
     useEffect(() => {
         gameService.getOne(gameId)
-        .then(res => setGame(res) )
+        .then(res => setGame(res));
+
+        commentService.getAll()
+        .then(setComments);
+
     },[gameId]);
+    
+    console.log(comments)
 
     const  addCommentHandler = async(e) => {
       e.preventDefault();
@@ -22,8 +31,7 @@ export default function GameDetails() {
         formData.get('username'),
         formData.get('comment')
       );
-      console.log(newComment);
-
+        setComments(state => [...state,newComment])
     }
 
     return (
@@ -43,14 +51,14 @@ export default function GameDetails() {
           <div className="details-comments">
             <h2>Comments:</h2>
             <ul>
-              <li className="comment">
-                <p>Content: I rate this one quite highly.</p>
-              </li>
-              <li className="comment">
-                <p>Content: The best game.</p>
-              </li>
+              {comments.map(({ _id,username,text,id}) => (
+                <li key={_id} className="comment">
+                   <p>{username}: {text}</p>
+                </li>
+              ))}
             </ul>
-            <p className="no-comment">No comments.</p>
+            {comments.length === 0 &&  <p className="no-comment">No comments.</p>}
+          
           </div>
           {/* <div className="buttons">
             <a href="#" className="button">

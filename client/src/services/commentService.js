@@ -12,3 +12,8 @@ export const create = async (gameId,username,text) => {
     });
     return newComment
 }
+
+export const getAll = async () => {
+    const allComments = await request.get(`${baseUrl}`)
+    return Object.values(allComments)
+}
