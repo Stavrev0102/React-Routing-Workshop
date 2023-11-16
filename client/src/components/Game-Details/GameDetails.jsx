@@ -19,11 +19,10 @@ export default function GameDetails() {
         .then(setComments);
 
     },[gameId]);
-      console.log(comments);
     const  addCommentHandler = async(e) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
-
+      
       const newComment = await commentService.create(
         gameId,
         formData.get('username'),
