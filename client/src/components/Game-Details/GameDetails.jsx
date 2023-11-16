@@ -15,13 +15,11 @@ export default function GameDetails() {
         gameService.getOne(gameId)
         .then(res => setGame(res));
 
-        commentService.getAll()
+        commentService.getAll(gameId)
         .then(setComments);
 
     },[gameId]);
-    
-    console.log(comments)
-
+      console.log(comments);
     const  addCommentHandler = async(e) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
