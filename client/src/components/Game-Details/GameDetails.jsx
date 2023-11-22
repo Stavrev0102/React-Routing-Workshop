@@ -8,7 +8,8 @@ import * as commentService from '../../services/commentService';
 import AuthContext from "../../contexts/authContext";
 
 export default function GameDetails() {
-  const {email} = useContext(AuthContext)
+    const { email } = useContext(AuthContext);
+    
     const { gameId } = useParams();
     const [game,setGame] = useState({});
     const [comments,setComments] = useState([]);
@@ -28,7 +29,7 @@ export default function GameDetails() {
       
       const newComment = await commentService.create(
         gameId,
-        formData.get('comment')
+        formData.get('comment'),
       );
         setComments(state => [...state,{...newComment, author:{ email } }])
     }

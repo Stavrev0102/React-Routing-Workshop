@@ -7,7 +7,8 @@ export const create = async (gameId,text) => {
 
     const newComment = await request.post(baseUrl, {
         gameId,
-        text
+        text,
+        
     });
     return newComment
 }
