@@ -1,6 +1,7 @@
 
 const Path = {
-    Home:'/'
+    Home:'/',
+    Logout:'/logout'
 }
 
 export default Path;
