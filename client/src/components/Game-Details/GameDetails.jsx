@@ -31,7 +31,7 @@ export default function GameDetails() {
         gameId,
         formData.get('comment'),
       );
-        setComments(state => [...state,{...newComment, author:{ email } }])
+        setComments(state => [...state,{...newComment, owner:{ email } }])
     }
 
     return (
