@@ -1,12 +1,14 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable no-unused-vars */
 
-import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import * as gameService from '../../services/gameService';
 import * as commentService from '../../services/commentService';
 import AuthContext from "../../contexts/authContext";
 import useForm from "../../hooks/useForm";
+import Path from "../../paths";
+import { pathToUrl } from "../../utils/pathUtils";
 
 export default function GameDetails() {
     const { email,_id } = useContext(AuthContext);
@@ -33,9 +35,10 @@ export default function GameDetails() {
         setComments(state => [...state,{...newComment, owner:{ email } }])
     }
 
-    const {values,onChange,onSubmit} = useForm(addCommentHandler, {
-      commnet:'',
-    })
+    const initialValues = useMemo(() => ({
+      comment:'',
+    }),[])
+    const {values,onChange,onSubmit} = useForm(addCommentHandler, initialValues)
 
     
 
@@ -69,12 +72,12 @@ export default function GameDetails() {
 
           {_id === game._ownerId && (
             <div className="buttons">
-              <a href="#" className="button">
+              <Link to={ pathToUrl(Path.GameEdit, {gameId}) }className="button">
                 Edit
-              </a>
-              <a href="#" className="button">
+              </Link>
+              <Link to="/games/:gameId/delete" className="button">
                 Delete
-              </a>
+              </Link>
             </div>
           )}
         </div>
