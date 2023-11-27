@@ -6,9 +6,10 @@ import { useParams } from "react-router-dom";
 import * as gameService from '../../services/gameService';
 import * as commentService from '../../services/commentService';
 import AuthContext from "../../contexts/authContext";
+import useForm from "../../hooks/useForm";
 
 export default function GameDetails() {
-    const { email } = useContext(AuthContext);
+    const { email,_id } = useContext(AuthContext);
     
     const { gameId } = useParams();
     const [game,setGame] = useState({});
@@ -23,59 +24,69 @@ export default function GameDetails() {
 
     },[gameId]);
 
-    const  addCommentHandler = async(e) => {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
+    const  addCommentHandler = async(values) => {
       
       const newComment = await commentService.create(
         gameId,
-        formData.get('comment'),
+        values.comment,
       );
         setComments(state => [...state,{...newComment, owner:{ email } }])
     }
+
+    const {values,onChange,onSubmit} = useForm(addCommentHandler, {
+      commnet:'',
+    })
+
+    
 
     return (
       <section id="game-details">
         <h1>Game Details</h1>
         <div className="info-section">
           <div className="game-header">
-            <img className="game-img" src={game.imageUrl} alt={game.title}/>
+            <img className="game-img" src={game.imageUrl} alt={game.title} />
             <h1>{game.title}</h1>
             <span className="levels">MaxLevel: {game.maxLevel}</span>
             <p className="type">{game.category}</p>
           </div>
-          <p className="text">
-            {game.summary}
-          </p>
-          
+          <p className="text">{game.summary}</p>
+
           <div className="details-comments">
             <h2>Comments:</h2>
             <ul>
-              {comments.map(({ _id,text, owner:{email}}) => (
+              {comments.map(({ _id, text, owner: { email } }) => (
                 <li key={_id} className="comment">
-                   <p>{email}: {text}</p>
+                  <p>
+                    {email}: {text}
+                  </p>
                 </li>
               ))}
             </ul>
-            {comments.length === 0 &&  <p className="no-comment">No comments.</p>}
-          
+            {comments.length === 0 && (
+              <p className="no-comment">No comments.</p>
+            )}
           </div>
-          {/* <div className="buttons">
-            <a href="#" className="button">
-              Edit
-            </a>
-            <a href="#" className="button">
-              Delete
-            </a>
-          </div> */}
+
+          {_id === game._ownerId && (
+            <div className="buttons">
+              <a href="#" className="button">
+                Edit
+              </a>
+              <a href="#" className="button">
+                Delete
+              </a>
+            </div>
+          )}
         </div>
+
         <article className="create-comment">
           <label>Add new comment:</label>
-          <form className="form" onSubmit={addCommentHandler}>
+          <form className="form" onSubmit={onSubmit}>
             <textarea
               name="comment"
               placeholder="Comment......"
-              defaultValue={""}
+              value={values.comment}
+              onChange={onChange}
             />
             <input
               className="btn submit"
@@ -84,7 +95,6 @@ export default function GameDetails() {
             />
           </form>
         </article>
-
       </section>
     );
 }

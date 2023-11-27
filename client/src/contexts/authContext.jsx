@@ -7,8 +7,6 @@ import * as authService from '../services/authService'
 import Path from '../paths';
 import usePersistedState from '../hooks/usePersistedState';
 
-
-
 const AuthContext = createContext();
 
 export const AuthProvider = ({
@@ -44,7 +42,8 @@ export const AuthProvider = ({
         logoutHandler,
         username:auth.username || auth.email,
         email:auth.email,
-        isAuthenticated: !!auth.accessToken
+        isAuthenticated: !!auth.accessToken,
+        _id:auth._id
       }
     
     return (
